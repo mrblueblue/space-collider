@@ -30,8 +30,6 @@ var spaceship = player.enter()
   .attr("y", "300")
   .classed('spaceship', true);
 
-
-
 var drag = d3.behavior.drag().on('drag', function(){
   spaceship.attr('x', d3.event.x)
            .attr('y', d3.event.y);});
@@ -42,7 +40,7 @@ var enemies =  createEnemies(30);
 
 var img = svg.selectAll("image").data(enemies);
 
-var asteroid = img.enter()
+var asteroids = img.enter()
   .append("svg:image")
   .attr("xlink:href",'asteroid.png')
   .attr("width", '25')
@@ -50,16 +48,49 @@ var asteroid = img.enter()
   .attr("x", function(d){return d.x})
   .attr("y", function(d){return d.y});
 
+var checkCollision = function(enemy, callback){
+
+    var radiusSum = parseFloat(enemy.attr('width')/2) + parseFloat(spaceship.attr('width')/2);
+    var xDiff = parseFloat( enemy.attr('x') ) - parseFloat( spaceship.attr('x') );
+    var yDiff = parseFloat( enemy.attr('y') ) - parseFloat( spaceship.attr('y') );
+    var separation = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+
+    var collision =  separation < radiusSum;
+
+    if (collision){
+      return callback(player, enemy);
+    }
+  };
+
+var onCollision = function(){
+
+  console.log('BOOM');
+};
+
 var updatePosition = function(){
-  asteroid.transition().duration(1500)
+  asteroids.transition().duration(1500)
     .attr("x",function(d){return Math.random() * 1000})
-    .attr("y",function(d){return Math.random() * 1000});
+    .attr("y",function(d){return Math.random() * 1000})
+    .tween('custom', function(enemyData){
+
+      var enemy = d3.select(this);
+
+      var startPosition = {
+        x: parseFloat(enemy.attr('x')),
+        y: parseFloat(enemy.attr('y'))
+      };
+
+      var endPosition = {
+        x: enemyData.x,
+        y: enemyData.y
+      };
+      return function(t){
+        checkCollision(enemy, onCollision);
+      };
+    });
 };
 
 setInterval(function(){
   updatePosition()}, 2000);
 
 
-// var enemies = svg.selectAll('enemies').data([1,2,3]);
-
-// enemies.enter().append('div')
