@@ -19,6 +19,25 @@ var svg = d3.select("body").append("svg")
   .attr("height", height)
   .style('background-color', 'black');
 
+var player = svg.selectAll("image").data([0]);
+
+var spaceship = player.enter()
+  .append("svg:image")
+  .attr("xlink:href", "spaceship.gif")
+  .attr("width", "35")
+  .attr("height", "35")
+  .attr("x", "500")
+  .attr("y", "300")
+  .classed('spaceship', true);
+
+
+
+var drag = d3.behavior.drag().on('drag', function(){
+  spaceship.attr('x', d3.event.x)
+           .attr('y', d3.event.y);});
+
+d3.selectAll(".spaceship").call(drag);
+
 var enemies =  createEnemies(30);
 
 var img = svg.selectAll("image").data(enemies);
