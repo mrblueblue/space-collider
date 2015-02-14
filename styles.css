@@ -3,6 +3,34 @@
 /* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
 
-div {
-  background-color: 'black';
+body {
+  background-color: #000622;
+  color: white;
+  font-family: 'Press Start 2P', sans-serif;
+  font-size: 1.25em;
+}
+
+.scoreboard {
+  margin: 0 auto;
+  text-align: center;
+
+}
+.scoreboard div {
+ display: inline-block;
+ margin: 50px 0 10px 0;
+}
+
+.highDiv {
+  /*padding-left: 100px;*/
+  /*padding-right: 100px;*/
+  width: 400px;
+}
+
+.currentDiv {
+  width: 400px;
+}
+
+.healthDiv {
+  /*padding-left: 100px;*/
+  width: 400px;
 }
